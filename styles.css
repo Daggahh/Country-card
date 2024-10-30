@@ -9,7 +9,7 @@
 
     /* Dark Mode Colors */
     --dark-blue-elements: hsl(209, 23%, 22%);
-    --very-dark-blue-background: hsl(207, 26%, 17%);
+    --very-dark-blue-background: #202c37;
     
     /* Light Mode Colors */
     --very-dark-blue-text: hsl(200, 15%, 8%);
@@ -49,7 +49,6 @@ body{
 }
 
 .nav .title{
-    color: var(--very-dark-blue-text);
     font-family: var(--body-font);
     font-weight: 800;
     font-size: 1.5rem;
@@ -156,6 +155,17 @@ select option{
     border-radius: 0 0 10px 10px;
 }
 
+.card {
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.card.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 .card .flag{
     height: 150px;
 }
@@ -189,7 +199,7 @@ select option{
 }
 
 .card:hover{
-    transform: translateY(-3px);
+    transform: translateY(-10px);
 }
 
 
@@ -200,10 +210,10 @@ select option{
 }
 
 .backButton{
-    display: inline-flex;
+    display: flex;
     width: 140px;
     gap: 15px;
-    background-color: #ffffff;
+    background-color: var(--white);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding: 0.8rem 2rem;
     border-radius: 10px;
@@ -217,6 +227,8 @@ select option{
 
 .backButtonImg{
     width: 25px;
+    display: flex;
+    align-items: center;
 }
 
 .backButton span{
@@ -229,23 +241,25 @@ select option{
 }
 
 .countryDetails{
-    display: flex;
-    gap: 10%;
-    align-items: center;
-}
-
-.flagInDetail, .mainDetails{
-    width: 40%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 auto 10%;
+    width: 89%;
 }
 
 .flagInDetail img{
+    max-width: 100%;
+    height: auto;
+    max-height: 22rem;
     width: 100%;
 }
 
 .mainDetails{
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    margin-left: 2.5rem;
+    padding: .8rem 0;
+    gap: 2rem;
 }
 
 .description{
@@ -264,25 +278,55 @@ select option{
     font-weight: 800;
 }
 
-.borderCounteries{
+.borderCountries{
     display: flex;
-    /* text-align: justify; */
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
 }
 
 .borderCountry{
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; 
-    padding: 0.5rem;
     border-radius: 5px;
+    background-color: var(--white);
+    box-shadow: 0 0 3px 3px rgb(0 0 0 / 3%);
+    cursor: pointer;
+    font-size: .7rem;
+    padding: .4rem 1.2rem;
+    transition: all .3s ease-in-out;
+    text-decoration: none;
+    color: var(--very-dark-blue-text);
 }
 
 
 .dark-mode {
-    background-color: #2b3743;
-    color: white; /* Optional: Set text color for dark mode */
+    background-color: var(--very-dark-blue-background);
+    color: var(--white); 
+
+    .dark-mode .borderCountry{
+        background-color: var(--dark-blue-elements);
+    }
 }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.flagInDetail { 
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.flagInDetail.slide-in{
+  animation: slideInLeft 0.5s ease forwards;
+}
+
 
 
 @media (max-width:1024px){

@@ -10,7 +10,7 @@ let countryContainer = document.getElementById("countryContainer");
 let detailsContainer = document.getElementById("detailsContainer");
 let countryDetailContainer = document.getElementById("countryDetails");
 
-const fetchCounteries = async () => {
+const fetchCountries = async () => {
   try {
     const response = await fetch("./data.json");
     if (!response.ok) {
@@ -19,7 +19,7 @@ const fetchCounteries = async () => {
 
     data = await response.json();
 
-    displayCounteries(data);
+    displayCountries(data);
   } catch (error) {
     console.error(error);
   }
@@ -30,10 +30,10 @@ function formatPopulation(population) {
 }
 
 
-const displayCounteries = (counteries) => {
+const displayCountries = (countries) => {
   countryContainer.innerHTML = ``;
 
-  counteries.forEach((country) => {
+  countries.forEach((country) => {
     let card = document.createElement("div");
     card.classList.add("card");
 
@@ -46,7 +46,7 @@ const displayCounteries = (counteries) => {
     let flag = document.createElement("div");
     flag.classList.add("flag");
     let flagImg = document.createElement("img");
-    flagImg.src = `${country.flags.png}`;
+    flagImg.src = `${country.flags.svg}`;
     flagImg.alt = `${country.name}`;
 
     flag.appendChild(flagImg);
@@ -85,6 +85,8 @@ const displayCounteries = (counteries) => {
     });
 
     countryContainer.appendChild(card);
+
+    setTimeout(() => card.classList.add("show"), 100);
   });
 };
 
@@ -96,7 +98,7 @@ searchBox.addEventListener("input", () => {
     let searchCardData = data.filter((country) => {
       return country.name.toLowerCase().includes(searchCountry);
     });
-    displayCounteries(searchCardData);
+    displayCountries(searchCardData);
   }, 300);
 });
 
@@ -108,27 +110,34 @@ searchBox.addEventListener("input", () => {
 //         }
 //     })
 
-//     displayCounteries(searchCardData)
+//     displayCountries(searchCardData)
 // })
 
 filterBox.addEventListener("change", () => {
   let selectedRegion = filterBox.value.toLowerCase();
-  let filterCardData = data.filter((country) => {
-    if (country.region.toLowerCase() == selectedRegion) {
-      return country;
-    }
-  });
 
-  displayCounteries(filterCardData);
+  let filterCardData;
+  if (selectedRegion === "all") {
+    filterCardData = data;
+  } else {
+    filterCardData = data.filter(
+      (country) => country.region.toLowerCase() === selectedRegion
+    );
+  }
+
+  displayCountries(filterCardData);
 });
 
 const countryDetails = (country) => {
   countryDetailContainer.innerHTML = ``;
+
   let flagInDetail = document.createElement("div");
   flagInDetail.classList.add("flagInDetail");
+    setTimeout(() => flagInDetail.classList.add("slide-in"), 500);
+
 
   let flagImg = document.createElement("img");
-  flagImg.src = `${country.flags.png}`;
+  flagImg.src = `${country.flags.svg}`;
   flagImg.alt = `${country.name}`;
 
   flagInDetail.appendChild(flagImg);
@@ -194,24 +203,37 @@ const countryDetails = (country) => {
   description.appendChild(descriptionLeft);
   description.appendChild(descriptionRight);
 
-  let borderCounteries = document.createElement("div");
-  borderCounteries.classList.add("borderCounteries");
-  borderCounteries.innerHTML = `<b>Border Counteries:</b>`;
+  let borderCountries = document.createElement("div");
+  borderCountries.classList.add("borderCountries");
+  borderCountries.innerHTML = `<b>Border Countries:</b>`;
 
   if (country.borders) {
     country.borders.forEach((border) => {
-      let borderCountry = document.createElement("div");
-      borderCountry.classList.add("borderCountry");
-      borderCountry.textContent = getCountryNameFromCode(border);
-      borderCounteries.appendChild(borderCountry);
+      let borderCountryLink = document.createElement("a");
+      borderCountryLink.classList.add("borderCountry");
+      borderCountryLink.textContent = getCountryNameFromCode(border);
+
+      borderCountryLink.href = `#`; 
+      borderCountryLink.addEventListener("click", () => {
+        const borderCountryData = data.find((c) => c.alpha3Code === border);
+        if (borderCountryData) {
+          countryDetails(borderCountryData); 
+          countryContainer.style.display = "none";
+          upperContainer.style.display = "none";
+          detailsContainer.style.display = "flex";
+        }
+      });
+
+      borderCountries.appendChild(borderCountryLink);
     });
   } else {
-    borderCounteries.innerHTML = `<b>Border Counteries:</b> none`;
+    borderCountries.innerHTML = `<b>Border Countries:</b> none`;
   }
+
 
   mainDetails.appendChild(countryName);
   mainDetails.appendChild(description);
-  mainDetails.appendChild(borderCounteries);
+  mainDetails.appendChild(borderCountries);
 
   countryDetailContainer.appendChild(flagInDetail);
   countryDetailContainer.appendChild(mainDetails);
@@ -228,7 +250,7 @@ backButton.addEventListener("click", () => {
   upperContainer.style.display = "flex";
 });
 
-fetchCounteries();
+fetchCountries();
 
 mode.addEventListener("click", () => {
   stateChange = !stateChange;
@@ -261,7 +283,9 @@ mode.addEventListener("click", () => {
             </span>
         `;
     document.body.style.backgroundColor = "#202d36";
-    document.body.style.color = "white";
+    document.body.style.color = "#ffffff";
+
+    document.getElementById("nav").style.color = "white"; 
     document.getElementById("nav").style.backgroundColor = "#2b3743";
     document.getElementById("search").style.backgroundColor = "#2b3743";
     document.getElementById("region").style.backgroundColor = "#2b3743";
@@ -289,6 +313,12 @@ mode.addEventListener("click", () => {
     document.getElementById(
       "backButtonImg"
     ).innerHTML = `<img src="./assets/arrow_back_30dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg" alt="dark back arrow">`;
+
+       let borderCountries = document.getElementsByClassName("borderCountry"); 
+       for (let i = 0; i < borderCountries.length; i++) {
+         borderCountries[i].style.backgroundColor = "#2b3945";
+         borderCountries[i].style.color = "white";
+       }
   } else {
     mode.innerHTML = `
             <span class="modeChange" title="Dark Theme">
@@ -299,6 +329,7 @@ mode.addEventListener("click", () => {
     document.body.style.backgroundColor = "white";
     document.body.style.color = "black";
     document.getElementById("nav").style.backgroundColor = "white";
+    document.getElementById("nav").style.color = "black"; 
     document.getElementById("search").style.backgroundColor = "white";
     document.getElementById("region").style.backgroundColor = "white";
     document.getElementById("search").style.color = "black";
@@ -324,6 +355,11 @@ mode.addEventListener("click", () => {
     backButton.style.backgroundColor = "white";
     document.getElementById(
       "backButtonImg"
-    ).innerHTML = `<img src="assets/arrow.png" alt="light back arrow">`;
+    ).innerHTML = `<img src="./assets/arrow_back_30dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="light back arrow">`;
+
+      let borderCountries = document.getElementsByClassName("borderCountry"); // New section
+      for (let i = 0; i < borderCountries.length; i++) {
+        borderCountries[i].style.backgroundColor = "white";
+      }
   }
 });
