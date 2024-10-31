@@ -255,23 +255,31 @@ fetchCountries();
 mode.addEventListener("click", () => {
   stateChange = !stateChange;
 
-  document.body.style.transition = "background-color 1s ease, color 1s ease";
-  document.getElementById("nav").style.transition = "background-color 1s ease";
-  document.getElementById("search").style.transition =
-    "background-color 1s ease, color 1s ease";
-  document.getElementById("region").style.transition =
-    "background-color 1s ease, color 1s ease";
-  backButton.style.transition = "background-color 1s ease";
+  // Set a shorter transition duration
+  const transitionDuration = "0.5s"; // Adjust the duration as needed
+
+  // Apply transition properties
+  document.body.style.transition = `background-color ${transitionDuration} ease, color ${transitionDuration} ease`;
+  document.getElementById(
+    "nav"
+  ).style.transition = `background-color ${transitionDuration} ease`;
+  document.getElementById(
+    "search"
+  ).style.transition = `background-color ${transitionDuration} ease, color ${transitionDuration} ease`;
+  document.getElementById(
+    "region"
+  ).style.transition = `background-color ${transitionDuration} ease, color ${transitionDuration} ease`;
+  backButton.style.transition = `background-color ${transitionDuration} ease`;
 
   let search = document.getElementById("search-box");
-  search.style.transition = "background-color 1s ease, color 1s ease";
+  search.style.transition = `background-color ${transitionDuration} ease, color ${transitionDuration} ease`;
 
   let regionSelect = document.getElementById("region");
-  regionSelect.style.transition = "background-color 1s ease, color 1s ease";
+  regionSelect.style.transition = `background-color ${transitionDuration} ease, color ${transitionDuration} ease`;
 
   let cards = document.getElementsByClassName("card");
   for (let i = 0; i < cards.length; i++) {
-    cards[i].style.transition = "background-color 1s ease";
+    cards[i].style.transition = `background-color ${transitionDuration} ease`;
   }
 
   if (stateChange) {
@@ -285,7 +293,7 @@ mode.addEventListener("click", () => {
     document.body.style.backgroundColor = "#202d36";
     document.body.style.color = "#ffffff";
 
-    document.getElementById("nav").style.color = "white"; 
+    document.getElementById("nav").style.color = "white";
     document.getElementById("nav").style.backgroundColor = "#2b3743";
     document.getElementById("search").style.backgroundColor = "#2b3743";
     document.getElementById("region").style.backgroundColor = "#2b3743";
@@ -314,22 +322,22 @@ mode.addEventListener("click", () => {
       "backButtonImg"
     ).innerHTML = `<img src="./assets/arrow_back_30dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg" alt="dark back arrow">`;
 
-       let borderCountries = document.getElementsByClassName("borderCountry"); 
-       for (let i = 0; i < borderCountries.length; i++) {
-         borderCountries[i].style.backgroundColor = "#2b3945";
-         borderCountries[i].style.color = "white";
-       }
+    let borderCountries = document.getElementsByClassName("borderCountry");
+    for (let i = 0; i < borderCountries.length; i++) {
+      borderCountries[i].style.backgroundColor = "#2b3945";
+      borderCountries[i].style.color = "white";
+    }
   } else {
     mode.innerHTML = `
             <span class="modeChange" title="Dark Theme">
-                <i class="fa-regular fa-moon"></i>&nbsp;
+                <img src="./assets/dark_mode_16dp_000000_FILL0_wght400_GRAD0_opsz20 (1).svg" alt="">
                 Dark Mode
             </span>
         `;
     document.body.style.backgroundColor = "white";
     document.body.style.color = "black";
     document.getElementById("nav").style.backgroundColor = "white";
-    document.getElementById("nav").style.color = "black"; 
+    document.getElementById("nav").style.color = "black";
     document.getElementById("search").style.backgroundColor = "white";
     document.getElementById("region").style.backgroundColor = "white";
     document.getElementById("search").style.color = "black";
@@ -357,9 +365,10 @@ mode.addEventListener("click", () => {
       "backButtonImg"
     ).innerHTML = `<img src="./assets/arrow_back_30dp_000000_FILL0_wght400_GRAD0_opsz24.svg" alt="light back arrow">`;
 
-      let borderCountries = document.getElementsByClassName("borderCountry"); // New section
-      for (let i = 0; i < borderCountries.length; i++) {
-        borderCountries[i].style.backgroundColor = "white";
-      }
+    let borderCountries = document.getElementsByClassName("borderCountry"); // New section
+    for (let i = 0; i < borderCountries.length; i++) {
+      borderCountries[i].style.backgroundColor = "white";
+    borderCountries[i].style.color = "#111517";
+    }
   }
 });
